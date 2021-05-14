@@ -1,0 +1,58 @@
+{
+  "name": "micromark-extension-rivendom",
+  "version": "1.0.0",
+  "description": "Micromark extension for Rivendom documents",
+  "keywords": [
+    "micromark",
+    "micromark-extension",
+    "rivendom",
+    "extension",
+    "markdown",
+    "unified"
+  ],
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "micromark": "^2.11.4",
+    "stringify-entities": "^3.1.0"
+  },
+  "files": [
+    "lib/",
+    "index.js",
+    "html.js"
+  ],
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.26.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
+    "prettier": "^2.3.0",
+    "tape": "^5.2.2"
+  },
+  "scripts": {
+    "format": "prettier --write \"lib/**/*.js\"",
+    "lint": "npx eslint",
+    "test": "node test.js",
+    "prepublishOnly": "npm run test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A lib",
+    "postVersion": "git push && git push --tags",
+    "build": "npx tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malkuthe/micromark-extension-rivendom.git"
+  },
+  "author": "Malkuthe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/malkuthe/micromark-extension-rivendom/issues"
+  },
+  "homepage": "https://github.com/malkuthe/micromark-extension-rivendom#readme"
+}
