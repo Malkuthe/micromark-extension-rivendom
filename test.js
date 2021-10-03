@@ -320,6 +320,34 @@ test('micromark-extension-rivendom (syntax)', (t) => {
       '<p>[:]{}()</p>',
       'should not support empty tag');
 
+    t.equal(micromark('x[:]{}()', options()),
+    '<p>x[:]{}()</p>',
+    'should not support character before tag');
+
+    t.equal(micromark('[:]{}()x', options()),
+    '<p>[:]{}()x</p>',
+    'should not support character after tag');
+
+    t.equal(micromark('[:]{}x()', options()),
+    '<p>[:]{}x()</p>',
+    'should not support character after attributes but before label');
+
+    t.equal(micromark('[:]{}x', options()),
+    '<p>[:]{}x</p>',
+    'should not support character after attributes without label');
+
+    t.equal(micromark('[:]x{}()', options()),
+    '<p>[:]x{}()</p>',
+    'should not support character between type and attributes');
+
+    t.equal(micromark('[:a]{b}(c\nd)', options()),
+    '<p>[:a]{b}(c\nd)</p>',
+    'should not support newlines in label');
+    
+    t.equal(micromark('[:a]{b}(c [:d]{e}(f) )', options({'*': h})),
+    '<p>[:a]{b}(c <d><attr>e</attr><label>f</label></d> )</p>',
+    'should not support tags in label');
+
     t.end();
   });
 });
