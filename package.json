@@ -51,7 +51,7 @@
     "preversion": "npm run lint",
     "version": "npm run format && git add -A lib",
     "postVersion": "git push && git push --tags",
-    "build": "npx tsc"
+    "build": "micromark-build"
   },
   "repository": {
     "type": "git",
