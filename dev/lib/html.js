@@ -7,7 +7,7 @@ const own = {}.hasOwnProperty;
  * @param {object} options
  * @returns {object}
  */
-function createRivendomTagHtmlExtension(options) {
+export function rivendomHTML(options) {
   const extensions = options || {};
 
   return {
@@ -167,5 +167,3 @@ function createRivendomTagHtmlExtension(options) {
     }
   }
 }
-
-export default createRivendomTagHtmlExtension;

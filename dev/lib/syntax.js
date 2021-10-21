@@ -1,25 +1,33 @@
-import codes from 'micromark/dist/character/codes.js';
+import { codes } from 'micromark-util-symbol/codes.js';
+import { 
+  markdownLineEndingOrSpace,
+  markdownLineEnding, 
+  markdownSpace, 
+  asciiAlpha,
+  asciiAlphanumeric } from 'micromark-util-character';
 
-import markdownLineEndingOrSpace from 'micromark/dist/character/markdown-line-ending-or-space.js';
-
-import markdownLineEnding from 'micromark/dist/character/markdown-line-ending.js';
-import markdownSpace from 'micromark/dist/character/markdown-space.js';
-
-import asciiAlpha from 'micromark/dist/character/ascii-alpha.js';
-import asciiAlphanumeric from 'micromark/dist/character/ascii-alphanumeric.js';
-
-import createSpace from 'micromark/dist/tokenize/factory-space.js';
+import { factorySpace as createSpace } from 'micromark-factory-space';
 
 import getCode from './character/get-code.js';
 
-import createAttributes from './attributes/index.js';
 import createLabel from './label.js';
+import createAttributes from './attributes/index.js';
 
-import util from 'util';
-
+/** 
+ * Check that the given code is a valid precursor
+ * for this tag.
+ * @param {Code} code
+ * @returns {Boolean}
+ */
 function previous(code) {
-  return markdownLineEndingOrSpace(code) || code === null;
+  return markdownLineEndingOrSpace(code)
+    || code === codes.underscore
+    || code === codes.verticalBar
+    || code === codes.tilde
+    || code === codes.asterisk
+    || code === null;
 }
+
 
 function tokenizeRivendomTag(effects, ok, nok) {
   const self = this;
@@ -103,7 +111,14 @@ function tokenizeRivendomTag(effects, ok, nok) {
   }
 
   function afterLabel(code) {
-    if (code === getCode('(')) return nok(code);
+    if ( !markdownLineEndingOrSpace(code) 
+      && code !== codes.eof
+      && code !== codes.asterisk
+      && code !== codes.verticalBar
+      && code !== codes.tilde
+      && code !== codes.underscore ) {
+        return nok(code)
+      };
     if (self.previous !== getCode('}') && self.previous !== getCode(')')) {
       return nok(code);
     }
@@ -112,14 +127,12 @@ function tokenizeRivendomTag(effects, ok, nok) {
   }
 }
 
-function tokenize() {
+export function rivendom() {
   return {
     text: {
       [getCode('[')]: {
         tokenize: tokenizeRivendomTag,
-      },
-    },
-  };
+      }
+    }
+  }
 }
-
-export default tokenize;

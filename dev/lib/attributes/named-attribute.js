@@ -1,14 +1,14 @@
 'use-strict';
 
-import codes from 'micromark/dist/character/codes.js';
+import { codes } from 'micromark-util-symbol/codes.js';
 
-import markdownLineEnding from 'micromark/dist/character/markdown-line-ending.js';
-import markdownSpace from 'micromark/dist/character/markdown-space.js';
+import { 
+  markdownLineEnding, 
+  markdownSpace, 
+  asciiAlpha, 
+  asciiAlphanumeric } from 'micromark-util-character';
 
-import asciiAlpha from 'micromark/dist/character/ascii-alpha.js';
-import asciiAlphanumeric from 'micromark/dist/character/ascii-alphanumeric.js';
-
-import createSpace from 'micromark/dist/tokenize/factory-space.js';
+import { factorySpace as createSpace } from 'micromark-factory-space';
 
 import getCode from '../character/get-code.js';
 import unicodeAlphanumeric from '../character/unicode-alphanumeric.js';

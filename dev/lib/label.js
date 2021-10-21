@@ -1,6 +1,6 @@
-import codes from 'micromark/dist/character/codes.js';
+import { codes } from 'micromark-util-symbol/codes.js';
 
-import markdownLineEnding from 'micromark/dist/character/markdown-line-ending.js';
+import { markdownLineEnding } from 'micromark-util-character';
 
 import getCode from './character/get-code.js';
 
@@ -33,7 +33,7 @@ function createLabel(effects, ok, nok) {
 
     if (code === getCode(')')) return atClosingParenthesis(code);
 
-    effects.enter('chunkText', { contentType: 'text' });
+    effects.enter('chunkText', { contentType: 'string' });
     return label(code);
   }
 

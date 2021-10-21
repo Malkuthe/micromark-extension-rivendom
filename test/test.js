@@ -1,7 +1,6 @@
 import test from 'tape';
-import micromark from 'micromark/lib/index.js';
-import syntax from './index.js';
-import html from './html.js';
+import {micromark} from 'micromark';
+import {rivendom as syntax, rivendomHTML as html} from '../dev/index.js';
 
 test('micromark-extension-rivendom (syntax)', (t) => {
   t.test('tag types', (t) => {
@@ -49,6 +48,106 @@ test('micromark-extension-rivendom (syntax)', (t) => {
 
     t.end();
   });
+
+  t.test('affixes', (t) => {
+    t.equal(micromark('[:a]{b}(c)', options({ '*': h,})),
+    '<p><a><attr>b</attr><label>c</label></a></p>',
+    'should support null prefix');
+
+    t.equal(micromark('\n[:a]{b}(c)', options({ '*': h,})),
+    '<p><a><attr>b</attr><label>c</label></a></p>',
+    'should support newline prefix');
+
+    t.equal(micromark('*[:a]{b}(c)', options({ '*': h,})),
+    '<p>*<a><attr>b</attr><label>c</label></a></p>',
+    'should support asterisk prefix');
+
+    t.equal(micromark('_[:a]{b}(c)', options({ '*': h,})),
+    '<p>_<a><attr>b</attr><label>c</label></a></p>',
+    'should support underscore prefix');
+
+    t.equal(micromark('~[:a]{b}(c)', options({ '*': h,})),
+    '<p>~<a><attr>b</attr><label>c</label></a></p>',
+    'should support tilde prefix');
+
+    t.equal(micromark('a[:a]{b}(c)', options({ '*': h,})),
+    '<p>a[:a]{b}(c)</p>',
+    'should not support alphanumeric prefix');
+
+    t.equal(micromark('1[:a]{b}(c)', options({ '*': h,})),
+    '<p>1[:a]{b}(c)</p>',
+    'should not support alphanumeric prefix');
+
+    t.equal(micromark('[:a]{b}(c)', options({ '*': h,})),
+    '<p><a><attr>b</attr><label>c</label></a></p>',
+    'should support null affix');
+
+    t.equal(micromark('[:a]{b}(c)\n', options({ '*': h,})),
+    '<p><a><attr>b</attr><label>c</label></a></p>\n',
+    'should support newline affix');
+
+    t.equal(micromark('[:a]{b}(c)*', options({ '*': h,})),
+    '<p><a><attr>b</attr><label>c</label></a>*</p>',
+    'should support asterisk affix');
+
+    t.equal(micromark('[:a]{b}(c)_', options({ '*': h,})),
+    '<p><a><attr>b</attr><label>c</label></a>_</p>',
+    'should support underscore affix');
+
+    t.equal(micromark('[:a]{b}(c)~', options({ '*': h,})),
+    '<p><a><attr>b</attr><label>c</label></a>~</p>',
+    'should support tilde affix');
+
+    t.equal(micromark('[:a]{b}(c)a', options({ '*': h,})),
+    '<p>[:a]{b}(c)a</p>',
+    'should not support alphanumeric affix');
+
+    t.equal(micromark('[:a]{b}(c)1', options({ '*': h,})),
+    '<p>[:a]{b}(c)1</p>',
+    'should not support alphanumeric affix');
+
+    t.end();
+  });
+
+  t.test('formatting', (t) => {
+    t.equal(micromark('_[:a]{b}(c)_', options({ '*': h,})),
+    '<p><em><a><attr>b</attr><label>c</label></a></em></p>',
+    'should support italics');
+
+    t.equal(micromark('*[:a]{b}(c)*', options({ '*': h,})),
+    '<p><em><a><attr>b</attr><label>c</label></a></em></p>',
+    'should support italics');
+
+    t.equal(micromark('**[:a]{b}(c)**', options({ '*': h,})),
+    '<p><strong><a><attr>b</attr><label>c</label></a></strong></p>',
+    'should support bold');
+    
+    t.equal(micromark('__[:a]{b}(c)__', options({ '*': h,})),
+    '<p><strong><a><attr>b</attr><label>c</label></a></strong></p>',
+    'should support bold');
+
+    t.equal(micromark('***[:a]{b}(c)***', options({ '*': h,})),
+    '<p><em><strong><a><attr>b</attr><label>c</label></a></strong></em></p>',
+    'should support bolded italics');
+
+    t.equal(micromark('*__[:a]{b}(c)__*', options({ '*': h,})),
+    '<p><em><strong><a><attr>b</attr><label>c</label></a></strong></em></p>',
+    'should support bolded italics');
+
+    t.equal(micromark('_**[:a]{b}(c)**_', options({ '*': h,})),
+    '<p><em><strong><a><attr>b</attr><label>c</label></a></strong></em></p>',
+    'should support bolded italics');
+
+    t.equal(micromark('__*[:a]{b}(c)*__', options({ '*': h,})),
+    '<p><strong><em><a><attr>b</attr><label>c</label></a></em></strong></p>',
+    'should support bolded italics');
+
+    t.equal(micromark('**_[:a]{b}(c)_**', options({ '*': h,})),
+    '<p><strong><em><a><attr>b</attr><label>c</label></a></em></strong></p>',
+    'should support bolded italics');
+
+    t.end()
+  })
 
   t.test('unquoted named attributes', (t) => {
     t.equal(micromark('[:a]{b=c d}(e)', options({
@@ -302,8 +401,8 @@ test('micromark-extension-rivendom (syntax)', (t) => {
 
   t.test('labels', (t) => {
     t.equal(micromark('[:a]{b}(c **d** e)', options({ '*': h })),
-      '<p><a><attr>b</attr><label>c <strong>d</strong> e</label></a></p>',
-      'should support markdown in the label');
+      '<p><a><attr>b</attr><label>c **d** e</label></a></p>',
+      'should not support markdown in the label');
     t.end();
   });
 
@@ -345,7 +444,7 @@ test('micromark-extension-rivendom (syntax)', (t) => {
     'should not support newlines in label');
     
     t.equal(micromark('[:a]{b}(c [:d]{e}(f) )', options({'*': h})),
-    '<p>[:a]{b}(c <d><attr>e</attr><label>f</label></d> )</p>',
+    '<p><a><attr>b</attr><label>c [:d]{e}(f) </label></a></p>',
     'should not support tags in label');
 
     t.end();
