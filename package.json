@@ -46,7 +46,7 @@
   "scripts": {
     "format": "prettier --write \"lib/**/*.js\"",
     "lint": "npx eslint",
-    "test": "node test.js",
+    "test": "node test/test.js",
     "prepublishOnly": "npm run test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A lib",
