@@ -1,5 +1,5 @@
 {
-  "name": "micromark-extension-rivendom",
+  "name": "@rivendom/micromark-extension-rivendom",
   "version": "1.0.0",
   "description": "Micromark extension for Rivendom documents",
   "keywords": [
