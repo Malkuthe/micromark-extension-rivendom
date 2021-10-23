@@ -68,7 +68,7 @@ function createValueAttribute(effects, ok, nok) {
     // If we hit a space or the attribute delineator `|`
     // or the end-of-attributes marker `}` assume the
     // value is fully tokenized and move on
-    if (markdownSpace(code) || code === getCode('|') || code === getCode('}')) {
+    if (code === getCode('|') || code === getCode('}')) {
       effects.exit('rivendomTagValueAttribute');
       return end(code);
     }

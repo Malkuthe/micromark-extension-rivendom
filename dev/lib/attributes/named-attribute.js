@@ -137,10 +137,6 @@ function createNamedAttribute(effects, ok, nok) {
       return createSpace(effects, beforeValue, 'whitespace')(code);
     }
 
-    // If the value is not quoted, it can only start with
-    // an alphanumeric
-    if (!unicodeAlphanumeric(code)) return nok(code);
-
     effects.enter('rivendomTagNamedAttributeValue');
     marker = undefined;
     return unQuotedValue(code);
@@ -188,7 +184,7 @@ function createNamedAttribute(effects, ok, nok) {
     )
       return nok(code);
 
-    if (markdownSpace(code) || code === getCode('|') || code === getCode('}')) {
+    if (code === getCode('|') || code === getCode('}')) {
       effects.exit('rivendomTagNamedAttributeValue');
       return afterValue(code);
     }

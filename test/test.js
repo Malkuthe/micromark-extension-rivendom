@@ -165,8 +165,8 @@ test('micromark-extension-rivendom (syntax)', (t) => {
     t.equal(micromark('[:a]{b=c d}(e)', options({
       '*': h,
     })),
-    '<p>[:a]{b=c d}(e)</p>',
-    'should not support values with spaces');
+    '<p><a><attr><name>b</name><value>c d</value></attr><label>e</label></a></p>',
+    'should support values with spaces');
 
     t.equal(micromark('[:a]{b=c&d}(e)', options({
       '*': h,
@@ -225,14 +225,14 @@ test('micromark-extension-rivendom (syntax)', (t) => {
     t.equal(micromark('[:a]{b=    1    }(c)', options({
       '*': h,
     })),
-    '<p><a><attr><name>b</name><value>1</value></attr><label>c</label></a></p>',
-    'should strip whitespaces from attribute value');
+    '<p><a><attr><name>b</name><value>1    </value></attr><label>c</label></a></p>',
+    'should strip whitespaces from before attribute value');
 
     t.equal(micromark('[:a]{    b    =    1    }(c)', options({
       '*': h,
     })),
-    '<p><a><attr><name>b</name><value>1</value></attr><label>c</label></a></p>',
-    'should strip whitespaces from attribute name & value');
+    '<p><a><attr><name>b</name><value>1    </value></attr><label>c</label></a></p>',
+    'should strip whitespaces from attribute name & before value');
 
     t.equal(micromark('[:a]{b=1}(c)', options({
       '*': h,
@@ -327,7 +327,7 @@ test('micromark-extension-rivendom (syntax)', (t) => {
     t.equal(micromark('[:a]{b c}(d)', options({
       '*': h,
     })),
-    '<p>[:a]{b c}(d)</p>',
+    '<p><a><attr>b c</attr><label>d</label></a></p>',
     'should not support unquoted unnamed attribute with spaces');
 
     t.equal(micromark('[:a]{b&c}(d)', options({
