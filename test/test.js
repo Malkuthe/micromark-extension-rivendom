@@ -46,6 +46,18 @@ test('micromark-extension-rivendom (syntax)', (t) => {
     '<p><a_b-c><attr>d</attr><label>e</label></a_b-c></p>',
     'should support names containing `-` and `_`');
 
+    t.equal(micromark('[:a](b)', options({
+      '*': h,
+    })),
+    '<p><a><label>b</label></a></p>',
+    'should support missing attributes');
+
+    t.equal(micromark('[:a]{b}', options({
+      '*': h,
+    })),
+    '<p><a><attr>b</attr></a></p>',
+    'should support missing label');
+
     t.end();
   });
 
@@ -459,13 +471,15 @@ function h(d) {
 
   this.tag(`<${t}>`);
 
-  attrs.forEach((v) => {
-    if (v) {
-      this.tag('<attr>');
-      this.raw(v);
-      this.tag('</attr>');
-    }
-  });
+  if (attrs) {
+    attrs.forEach((v) => {
+      if (v) {
+        this.tag('<attr>');
+        this.raw(v);
+        this.tag('</attr>');
+      }
+    });
+  }
 
   Object.entries(na).forEach((o) => {
     const [n, v] = o;

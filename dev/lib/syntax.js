@@ -99,7 +99,17 @@ function tokenizeRivendomTag(effects, ok, nok) {
       effects.enter('rivendomTagTypeMarker');
       effects.consume(code);
       effects.exit('rivendomTagTypeMarker');
-      return createAttributes(effects, afterAttributes, (c) => nok(c), self);
+      return beforeAttributesOrLabel;
+    }
+
+    return nok(code);
+  }
+
+  function beforeAttributesOrLabel(code) {
+    if (code === getCode('{')) {
+      return createAttributes(effects,afterAttributes,(c) => nok(c), self)(code);
+    } else if (code === getCode('(')) {
+      return createLabel(effects, afterLabel, afterLabel, self)(code);
     }
 
     return nok(code);

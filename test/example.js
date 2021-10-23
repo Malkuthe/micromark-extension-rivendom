@@ -1,7 +1,7 @@
 import { micromark } from 'micromark';
 import { rivendom as syntax, rivendomHTML as html } from '../dev/index.js';
 
-let r = micromark('**[:a]{b}(c&amp;d)**', {
+let r = micromark('**[:a]{b|e|f=g}(c&amp;d)**', {
   extensions: [syntax()],
   htmlExtensions: [html({"*": h})],
 })
